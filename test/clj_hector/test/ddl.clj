@@ -221,7 +221,7 @@
                                         :column-metadata
                                         [{:name col-name
                                           :validator :utf-8}]}]})
-      (is (= {:name (vec col-name) :validation-class :utf-8}
+      (is (= {:name (vec col-name) :validator :utf-8}
              (update-in (first (:column-metadata (first (column-families cluster random-ks))))
                         [:name] vec)))
       (drop-keyspace cluster random-ks))))

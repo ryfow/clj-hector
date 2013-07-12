@@ -172,9 +172,9 @@
               expected [{:name "col"
                          :index-name "colidx",
                          :index-type :keys,
-                         :validation-class :utf-8}
+                         :validator :utf-8}
                         {:name "coltwo"
-                         :validation-class :integer}]]
+                         :validator :integer}]]
           (is (= (set expected) (set actual))))
 
 (drop-keyspace cluster random-ks))))
@@ -207,21 +207,4 @@
       (drop-keyspace cluster random-ks))))
 
 
-(deftest should-add-non-string-column-metadata
-  (let [random-ks (.replace (str "ks" (java.util.UUID/randomUUID)) "-" "")
-        col-name (.getBytes "col" "UTF-8")]
-    (with-test-cluster cluster
-      (add-keyspace cluster
-                    {:name random-ks
-                     :strategy :simple
-                     :replication 1
-                     :column-families [{:name "a"
-                                        :type :standard
-                                        :k-validator :uuid
-                                        :column-metadata
-                                        [{:name col-name
-                                          :validator :utf-8}]}]})
-      (is (= {:name (vec col-name) :validation-class :utf-8}
-             (update-in (first (:column-metadata (first (column-families cluster random-ks))))
-                        [:name] vec)))
-      (drop-keyspace cluster random-ks))))
+
